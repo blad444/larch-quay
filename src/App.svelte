@@ -1,4 +1,5 @@
 <script>
+  import SpecialOffers from './components/SpecialOffers.svelte';
   import { onMount, tick } from 'svelte';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -905,6 +906,8 @@
       </div>
     </div>
   </section>
+
+  <SpecialOffers {flats} {prices} onBook={openCallback} />
 
   <section id="catalog" class="catalog wrap">
     <div class="row">
