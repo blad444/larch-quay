@@ -248,7 +248,7 @@
     let p = (y - heroTop) / (heroHeight - vh);
     if (p < 0) p = 0;
     if (p > 1) p = 1;
-    if (heroVideo && heroVideo.duration) {
+    if (heroVideo && heroVideo.duration && window.innerWidth > 768) {
       heroVideo.currentTime = p * heroVideo.duration;
     }
     heroBg.style.top = y * 0.35 + "px";
@@ -270,22 +270,6 @@
       if (k < -1) k = -1;
       if (k > 1) k = 1;
       title.style.top = k * 4 + "px";
-    });
-
-    document.querySelectorAll(".feature-photo img").forEach((img) => {
-      const r = img.parentNode.getBoundingClientRect();
-      let k = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
-      if (k < -1) k = -1;
-      if (k > 1) k = 1;
-      img.style.top = -k * 6 + "px";
-    });
-
-    document.querySelectorAll(".gallery-shot img").forEach((img) => {
-      const r = img.parentNode.getBoundingClientRect();
-      let k = (r.top + r.height / 2 - vh / 2) / vh;
-      if (k < -1) k = -1;
-      if (k > 1) k = 1;
-      img.style.top = -6 - k * 6 + "px";
     });
 
     document
@@ -343,12 +327,15 @@
   }
 
   function onSearch(e) {
-    query = e.target.value;
-    getJSON("/api/flats.json?q=" + query).then((list) => {
-      const q = query.trim().toUpperCase();
-      found = list.filter((f) => f.id.indexOf(q) > -1).map((f) => f.id);
-    });
-  }
+  query = e.target.value;
+  const q = query.trim().toUpperCase();
+
+  found = q
+    ? flats
+        .filter((f) => f.id.toUpperCase().includes(q))
+        .map((f) => f.id)
+    : [];
+}
 
   function clearFilters() {
     rooms = [];
@@ -2715,7 +2702,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
+    opacity: 1;
     transform: scale(1.08);
     transition: opacity 0.6s var(--ease-soft);
     will-change: opacity, transform;
