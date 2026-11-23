@@ -834,10 +834,11 @@
       onCalc();
       preparePayments(list);
       tick().then(() => ScrollTrigger.refresh());
-      list.forEach((flat) => {
-        getJSON("/api/flats/" + flat.id + ".json").then((data) => {
-          Object.assign(flat, data);
-          flats = flats;
+      ["QS-1209", "CH-907", "YD-708", "TR-609"].forEach((id) => {
+        getJSON("/api/flats/" + id + ".json").then((data) => {
+          const flat = list.find((item) => item.id === id);
+          if (flat) Object.assign(flat, data);
+          flats = [...list];
         });
       });
     });
@@ -893,7 +894,6 @@
         gallerySwiper.slideNext();
       }
     }, 4500);
-
 
     map = new maplibregl.Map({
       container: mapEl,
