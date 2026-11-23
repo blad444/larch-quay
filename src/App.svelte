@@ -2118,7 +2118,7 @@
     top: 50%;
     left: 50%;
     display: block;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     max-width: none;
     margin: -50vh 0 0 -50vw;
