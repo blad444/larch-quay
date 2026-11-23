@@ -1,53 +1,59 @@
 <script>
-  import SpecialOffers from './components/SpecialOffers.svelte';
-  import { onMount, tick } from 'svelte';
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { SplitText } from 'gsap/SplitText';
-  import Swiper from 'swiper';
-  import { FreeMode } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/free-mode';
-  import * as maplibregl from 'maplibre-gl';
-  import 'maplibre-gl/dist/maplibre-gl.css';
-  import mapWorker from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
-  import { slide } from 'svelte/transition';
-  import { getJSON, getJSONSync } from './lib/api.js';
-  import { uiStore, flatsStore, favoritesStore } from './lib/store.js';
-  import { buildSchedule } from './lib/mortgage.js';
-  import { newsDate, monthTitle, pounds, perMonth, area } from './lib/format.js';
-  import Lightbox from './components/Lightbox.svelte';
-  import FlatList from './components/FlatList.svelte';
-  import FlatModal from './components/FlatModal.svelte';
-  import ModalLead from './components/ModalLead.svelte';
-  import ModalCallback from './components/ModalCallback.svelte';
+  import SpecialOffers from "./components/SpecialOffers.svelte";
+  import { onMount, tick } from "svelte";
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { SplitText } from "gsap/SplitText";
+  import Swiper from "swiper";
+  import { FreeMode } from "swiper/modules";
+  import "swiper/css";
+  import "swiper/css/free-mode";
+  import * as maplibregl from "maplibre-gl";
+  import "maplibre-gl/dist/maplibre-gl.css";
+  import mapWorker from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
+  import { slide } from "svelte/transition";
+  import { getJSON, getJSONSync } from "./lib/api.js";
+  import { uiStore, flatsStore, favoritesStore } from "./lib/store.js";
+  import { buildSchedule } from "./lib/mortgage.js";
+  import {
+    newsDate,
+    monthTitle,
+    pounds,
+    perMonth,
+    area,
+  } from "./lib/format.js";
+  import Lightbox from "./components/Lightbox.svelte";
+  import FlatList from "./components/FlatList.svelte";
+  import FlatModal from "./components/FlatModal.svelte";
+  import ModalLead from "./components/ModalLead.svelte";
+  import ModalCallback from "./components/ModalCallback.svelte";
 
-  import quayAerial from './assets/about/quay-aerial.png';
-  import interior1 from './assets/about/interior-1.png';
-  import interior2 from './assets/about/interior-2.png';
-  import iconPier from './assets/icons/pier.png';
-  import iconCrane from './assets/icons/crane.png';
-  import iconWarehouse from './assets/icons/warehouse.png';
-  import iconTree from './assets/icons/tree.png';
-  import iconHeight from './assets/icons/height.png';
-  import iconWave from './assets/icons/wave.png';
-  import iconBoard from './assets/icons/board.png';
+  import quayAerial from "./assets/about/quay-aerial.png";
+  import interior1 from "./assets/about/interior-1.png";
+  import interior2 from "./assets/about/interior-2.png";
+  import iconPier from "./assets/icons/pier.png";
+  import iconCrane from "./assets/icons/crane.png";
+  import iconWarehouse from "./assets/icons/warehouse.png";
+  import iconTree from "./assets/icons/tree.png";
+  import iconHeight from "./assets/icons/height.png";
+  import iconWave from "./assets/icons/wave.png";
+  import iconBoard from "./assets/icons/board.png";
 
   gsap.registerPlugin(ScrollTrigger, SplitText);
   maplibregl.setWorkerUrl(mapWorker);
 
   export let config = window.appConfig || {};
 
-  $: title = config.siteName || 'Larch Quay';
-  $: phone = config.phone || '+44 131 496 0418';
-  $: phoneHref = 'tel:' + phone.replace(/\s/g, '');
+  $: title = config.siteName || "Larch Quay";
+  $: phone = config.phone || "+44 131 496 0418";
+  $: phoneHref = "tel:" + phone.replace(/\s/g, "");
 
   let sections = {};
   $: about = sections.about || {};
-  $: aboutParts = (about.html || '')
-    .split('</p>')
+  $: aboutParts = (about.html || "")
+    .split("</p>")
     .filter((p) => p.trim())
-    .map((p) => p + '</p>');
+    .map((p) => p + "</p>");
   $: facts = about.facts || [];
   $: film = about.film || {};
   $: advantages = sections.advantages || [];
@@ -72,59 +78,95 @@
   };
 
   const featurePhotos = [
-    { src: '/media/gallery/render-08.png', alt: 'The pier with the water tram' },
-    { src: '/media/gallery/render-02.png', alt: 'The cranes lit at dusk' },
-    { src: '/media/gallery/render-06.png', alt: 'The arched windows of the Larch Store' },
-    { src: '/media/gallery/render-03.png', alt: 'The courtyard with young birches' },
-    { src: '/media/gallery/render-05.png', alt: 'A living room in Quayside with windows from floor to ceiling' },
-    { src: '/media/gallery/render-04.png', alt: 'The water along the granite edge' },
-    { src: interior2, alt: 'Larch boards on a facade, amber turning silver' },
+    {
+      src: "/media/gallery/render-08.png",
+      alt: "The pier with the water tram",
+    },
+    { src: "/media/gallery/render-02.png", alt: "The cranes lit at dusk" },
+    {
+      src: "/media/gallery/render-06.png",
+      alt: "The arched windows of the Larch Store",
+    },
+    {
+      src: "/media/gallery/render-03.png",
+      alt: "The courtyard with young birches",
+    },
+    {
+      src: "/media/gallery/render-05.png",
+      alt: "A living room in Quayside with windows from floor to ceiling",
+    },
+    {
+      src: "/media/gallery/render-04.png",
+      alt: "The water along the granite edge",
+    },
+    { src: interior2, alt: "Larch boards on a facade, amber turning silver" },
   ];
   const photoSizes = [
-    { w: 320, ratio: '4 / 5' },
-    { w: 440, ratio: '3 / 2' },
-    { w: 280, ratio: '1 / 1' },
+    { w: 320, ratio: "4 / 5" },
+    { w: 440, ratio: "3 / 2" },
+    { w: 280, ratio: "1 / 1" },
   ];
 
   const gallery = [
-    { src: '/media/gallery/render-07.png', alt: 'Terrace, with roof gardens on every step' },
-    { src: '/media/gallery/render-06.png', alt: 'The Larch Store, built in 1912' },
-    { src: '/media/gallery/render-08.png', alt: 'The pier and the water tram' },
-    { src: '/media/gallery/render-01.png', alt: 'Quayside and Crane House from the water on an overcast morning' },
-    { src: '/media/gallery/render-03.png', alt: 'The courtyard with young birches' },
-    { src: '/media/gallery/render-02.png', alt: 'The three cranes at dusk' },
-    { src: '/media/gallery/render-05.png', alt: 'A living room in Quayside looking at the cranes' },
-    { src: '/media/gallery/render-09.png', alt: 'A bedroom with a larch floor' },
-    { src: '/media/gallery/render-04.png', alt: 'The promenade along the granite edge' },
+    {
+      src: "/media/gallery/render-07.png",
+      alt: "Terrace, with roof gardens on every step",
+    },
+    {
+      src: "/media/gallery/render-06.png",
+      alt: "The Larch Store, built in 1912",
+    },
+    { src: "/media/gallery/render-08.png", alt: "The pier and the water tram" },
+    {
+      src: "/media/gallery/render-01.png",
+      alt: "Quayside and Crane House from the water on an overcast morning",
+    },
+    {
+      src: "/media/gallery/render-03.png",
+      alt: "The courtyard with young birches",
+    },
+    { src: "/media/gallery/render-02.png", alt: "The three cranes at dusk" },
+    {
+      src: "/media/gallery/render-05.png",
+      alt: "A living room in Quayside looking at the cranes",
+    },
+    {
+      src: "/media/gallery/render-09.png",
+      alt: "A bedroom with a larch floor",
+    },
+    {
+      src: "/media/gallery/render-04.png",
+      alt: "The promenade along the granite edge",
+    },
   ];
   const galleryModules = [
-    { type: 'tall', items: [0] },
-    { type: 'pair', items: [1, 2] },
-    { type: 'wide', items: [3] },
-    { type: 'tall', items: [4] },
-    { type: 'wide', items: [5] },
-    { type: 'tall', items: [6] },
-    { type: 'wide', items: [7] },
-    { type: 'tall', items: [8] },
+    { type: "tall", items: [0] },
+    { type: "pair", items: [1, 2] },
+    { type: "wide", items: [3] },
+    { type: "tall", items: [4] },
+    { type: "wide", items: [5] },
+    { type: "tall", items: [6] },
+    { type: "wide", items: [7] },
+    { type: "tall", items: [8] },
   ];
 
   const buildings = [
-    { name: 'Quayside', title: 'Quayside, 21 floors, keys in Q4 2027' },
-    { name: 'Crane House', title: 'Crane House, 16 floors, keys in Q2 2028' },
-    { name: 'Yard', title: 'Yard, 12 floors, keys in Q3 2028' },
-    { name: 'Terrace', title: 'Terrace, 9 floors, keys in Q3 2028' },
+    { name: "Quayside", title: "Quayside, 21 floors, keys in Q4 2027" },
+    { name: "Crane House", title: "Crane House, 16 floors, keys in Q2 2028" },
+    { name: "Yard", title: "Yard, 12 floors, keys in Q3 2028" },
+    { name: "Terrace", title: "Terrace, 9 floors, keys in Q3 2028" },
   ];
   const sorts = [
-    { value: 'price', label: 'Price, low to high' },
-    { value: 'price-desc', label: 'Price, high to low' },
-    { value: 'area', label: 'Area' },
-    { value: 'floor', label: 'Floor' },
+    { value: "price", label: "Price, low to high" },
+    { value: "price-desc", label: "Price, high to low" },
+    { value: "area", label: "Area" },
+    { value: "floor", label: "Floor" },
   ];
 
   let flats = [];
   let prices = {};
   let found = [];
-  let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+  let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   let activeFlat = null;
   let groups = [];
   let rooms = [];
@@ -134,8 +176,8 @@
   let priceTo = null;
   let floorFrom = null;
   let floorTo = null;
-  let query = '';
-  let sort = 'price';
+  let query = "";
+  let sort = "price";
 
   $: roomOptions = (config.filters && config.filters.rooms) || [0, 1, 2, 3, 4];
 
@@ -154,13 +196,26 @@
     if (floorTo) list = list.filter((f) => f.floor <= floorTo);
     if (query) list = list.filter((f) => found.indexOf(f.id) > -1);
     list.sort((a, b) => {
-      if (sort === 'price-desc') return b.price - a.price;
-      if (sort === 'area') return a.area - b.area;
-      if (sort === 'floor') return a.floor - b.floor;
+      if (sort === "price-desc") return b.price - a.price;
+      if (sort === "area") return a.area - b.area;
+      if (sort === "floor") return a.floor - b.floor;
       return a.price - b.price;
     });
-    groups = buildings.map((b) => ({ ...b, flats: list.filter((f) => f.building === b.name) }));
-    window.appState.filters = { rooms, areaFrom, areaTo, priceFrom, priceTo, floorFrom, floorTo, query, sort };
+    groups = buildings.map((b) => ({
+      ...b,
+      flats: list.filter((f) => f.building === b.name),
+    }));
+    window.appState.filters = {
+      rooms,
+      areaFrom,
+      areaTo,
+      priceFrom,
+      priceTo,
+      floorFrom,
+      floorTo,
+      query,
+      sort,
+    };
     window.appState.favorites = favorites;
   }
 
@@ -196,59 +251,62 @@
     if (heroVideo && heroVideo.duration) {
       heroVideo.currentTime = p * heroVideo.duration;
     }
-    heroBg.style.top = y * 0.35 + 'px';
+    heroBg.style.top = y * 0.35 + "px";
     heroCopy.style.opacity = Math.max(0, 1 - p * 3);
 
-    topBar.style.height = Math.max(80, 84 - y / 60) + 'px';
+    topBar.style.height = Math.max(80, 84 - y / 60) + "px";
     if (y > lastY && y > 320) {
-      topBar.style.top = '-' + (topBar.offsetHeight + 60) + 'px';
+      topBar.style.top = "-" + (topBar.offsetHeight + 60) + "px";
     } else {
-      topBar.style.top = '0px';
+      topBar.style.top = "0px";
     }
     lastY = y;
-    topBand.style.width = y > heroTop + heroHeight - topBar.offsetHeight ? '100%' : '0%';
+    topBand.style.width =
+      y > heroTop + heroHeight - topBar.offsetHeight ? "100%" : "0%";
 
-    document.querySelectorAll('.section-title').forEach((title) => {
+    document.querySelectorAll(".section-title").forEach((title) => {
       const r = title.getBoundingClientRect();
       let k = (r.top - vh / 2) / vh;
       if (k < -1) k = -1;
       if (k > 1) k = 1;
-      title.style.top = k * 4 + 'px';
+      title.style.top = k * 4 + "px";
     });
 
-    document.querySelectorAll('.feature-photo img').forEach((img) => {
+    document.querySelectorAll(".feature-photo img").forEach((img) => {
       const r = img.parentNode.getBoundingClientRect();
       let k = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
       if (k < -1) k = -1;
       if (k > 1) k = 1;
-      img.style.top = -k * 6 + 'px';
+      img.style.top = -k * 6 + "px";
     });
 
-    document.querySelectorAll('.gallery-shot img').forEach((img) => {
+    document.querySelectorAll(".gallery-shot img").forEach((img) => {
       const r = img.parentNode.getBoundingClientRect();
       let k = (r.top + r.height / 2 - vh / 2) / vh;
       if (k < -1) k = -1;
       if (k > 1) k = 1;
-      img.style.top = -6 - k * 6 + 'px';
+      img.style.top = -6 - k * 6 + "px";
     });
 
-    document.querySelectorAll('.flat, .mortgage-row, .news-item').forEach((row) => {
-      const r = row.getBoundingClientRect();
-      let d = r.top - vh * 0.85;
-      if (d < 0) d = 0;
-      row.style.top = (d / (d + 100)) * 8 + 'px';
-    });
+    document
+      .querySelectorAll(".flat, .mortgage-row, .news-item")
+      .forEach((row) => {
+        const r = row.getBoundingClientRect();
+        let d = r.top - vh * 0.85;
+        if (d < 0) d = 0;
+        row.style.top = (d / (d + 100)) * 8 + "px";
+      });
 
-    const panels = document.querySelectorAll('.progress-panel');
+    const panels = document.querySelectorAll(".progress-panel");
     panels.forEach((panel, i) => {
       const next = panels[i + 1];
       if (!next) return;
       let k = 1 - next.getBoundingClientRect().top / window.innerHeight;
       if (k < 0) k = 0;
       if (k > 1) k = 1;
-      panel.querySelector('.progress-shade').style.opacity = k * 0.6;
-      panel.querySelectorAll('.progress-img').forEach((img) => {
-        img.style.transform = 'scale(' + (1.08 - k * 0.06) + ')';
+      panel.querySelector(".progress-shade").style.opacity = k * 0.6;
+      panel.querySelectorAll(".progress-img").forEach((img) => {
+        img.style.transform = "scale(" + (1.08 - k * 0.06) + ")";
       });
     });
   }
@@ -276,16 +334,17 @@
       favorites = [...favorites, id];
     }
     favoritesStore.set(favorites);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    localStorage.setItem("favorites", JSON.stringify(favorites));
   }
 
   function toggleRooms(r) {
-    rooms = rooms.indexOf(r) > -1 ? rooms.filter((x) => x !== r) : [...rooms, r];
+    rooms =
+      rooms.indexOf(r) > -1 ? rooms.filter((x) => x !== r) : [...rooms, r];
   }
 
   function onSearch(e) {
     query = e.target.value;
-    getJSON('/api/flats.json?q=' + query).then((list) => {
+    getJSON("/api/flats.json?q=" + query).then((list) => {
       const q = query.trim().toUpperCase();
       found = list.filter((f) => f.id.indexOf(q) > -1).map((f) => f.id);
     });
@@ -299,9 +358,9 @@
     priceTo = null;
     floorFrom = null;
     floorTo = null;
-    query = '';
+    query = "";
     found = [];
-    sort = 'price';
+    sort = "price";
   }
 
   function preparePayments(list) {
@@ -318,12 +377,19 @@
             schedule.forEach((row) => {
               total += row.payment;
             });
-            rows.push({ rate, term, down, monthly: schedule[0].payment, total, overpay: total - loan });
+            rows.push({
+              rate,
+              term,
+              down,
+              monthly: schedule[0].payment,
+              total,
+              overpay: total - loan,
+            });
           });
         });
       });
       payments[flat.id] = rows;
-      console.log('payments', flat.id, rows);
+      console.log("payments", flat.id, rows);
     });
     window.appState.payments = payments;
   }
@@ -333,85 +399,200 @@
   }
 
   function intro() {
-    const split = SplitText.create(heroTitle.querySelectorAll('.hero-line'), {
-      type: 'lines',
-      mask: 'lines',
-      linesClass: 'hero-mask-line',
+    const split = SplitText.create(heroTitle.querySelectorAll(".hero-line"), {
+      type: "lines",
+      mask: "lines",
+      linesClass: "hero-mask-line",
     });
-    gsap.set([heroTitle, heroCopy], { visibility: 'visible' });
+    gsap.set([heroTitle, heroCopy], { visibility: "visible" });
     gsap.from(split.lines, {
       yPercent: 105,
       duration: 0.9,
-      ease: 'expo.out',
+      ease: "expo.out",
       stagger: 0.11,
       delay: 0.15,
       onComplete: () => {
         gsap
-          .timeline({ scrollTrigger: { trigger: heroStage, start: 'top top', end: '+=480', scrub: true } })
-          .fromTo(split.lines[0], { yPercent: 0, opacity: 1 }, { yPercent: -105, opacity: 0, ease: 'none', immediateRender: false })
-          .fromTo(split.lines[1], { yPercent: 0, opacity: 1 }, { yPercent: 105, opacity: 0, ease: 'none', immediateRender: false }, 0);
+          .timeline({
+            scrollTrigger: {
+              trigger: heroStage,
+              start: "top top",
+              end: "+=480",
+              scrub: true,
+            },
+          })
+          .fromTo(
+            split.lines[0],
+            { yPercent: 0, opacity: 1 },
+            {
+              yPercent: -105,
+              opacity: 0,
+              ease: "none",
+              immediateRender: false,
+            },
+          )
+          .fromTo(
+            split.lines[1],
+            { yPercent: 0, opacity: 1 },
+            { yPercent: 105, opacity: 0, ease: "none", immediateRender: false },
+            0,
+          );
       },
     });
-    gsap.from(heroCopy.children, { top: 24, opacity: 0, duration: 0.7, ease: 'power3.out', delay: 0.6 });
+    gsap.from(heroCopy.children, {
+      top: 24,
+      opacity: 0,
+      duration: 0.7,
+      ease: "power3.out",
+      delay: 0.6,
+    });
   }
 
   function reveal(targets, trigger, vars) {
-    const list = typeof targets === 'string' ? document.querySelectorAll(targets) : targets;
+    const list =
+      typeof targets === "string"
+        ? document.querySelectorAll(targets)
+        : targets;
     if (!list || !list.length) return;
     gsap.from(list, {
       opacity: 0,
       y: 24,
       duration: 0.75,
-      ease: 'power3.out',
+      ease: "power3.out",
       stagger: 0.08,
       immediateRender: false,
-      scrollTrigger: { trigger: trigger || list[0], start: 'top 92%', once: true },
+      scrollTrigger: {
+        trigger: trigger || list[0],
+        start: "top 92%",
+        once: true,
+      },
       ...vars,
     });
   }
 
   function motion() {
-    reveal('#about .section-title, #about .about-lead', '#about');
-    reveal('#about .about-photo', '#about .about-mosaic', { y: 0, clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'power4.inOut' });
-    reveal('#about .about-paper, #about .about-tile', '#about .about-mosaic', { delay: 0.35 });
-    reveal('#about .about-fact', '#about .about-facts', { y: 0, top: 20, stagger: 0.07 });
-    reveal('#about .about-film > div', '#about .about-film');
+    reveal("#about .section-title, #about .about-lead", "#about");
+    reveal("#about .about-photo", "#about .about-mosaic", {
+      y: 0,
+      clipPath: "inset(0 0 100% 0)",
+      duration: 1.1,
+      ease: "power4.inOut",
+    });
+    reveal("#about .about-paper, #about .about-tile", "#about .about-mosaic", {
+      delay: 0.35,
+    });
+    reveal("#about .about-fact", "#about .about-facts", {
+      y: 0,
+      top: 20,
+      stagger: 0.07,
+    });
+    reveal("#about .about-film > div", "#about .about-film");
 
-    reveal('#features .features-head', '#features');
-    document.querySelectorAll('#features .feature-row').forEach((row) => {
-      reveal(row.querySelectorAll('.feature-title, .feature-text'), row);
-      reveal(row.querySelectorAll('.feature-photo'), row, { y: 0, clipPath: 'inset(100% 0 0 0)', duration: 1, ease: 'power4.inOut', delay: 0.12 });
+    reveal("#features .features-head", "#features");
+    document.querySelectorAll("#features .feature-row").forEach((row) => {
+      reveal(row.querySelectorAll(".feature-title, .feature-text"), row);
+      reveal(row.querySelectorAll(".feature-photo"), row, {
+        y: 0,
+        clipPath: "inset(100% 0 0 0)",
+        duration: 1,
+        ease: "power4.inOut",
+        delay: 0.12,
+      });
     });
 
     gsap
-      .timeline({ scrollTrigger: { trigger: openingEl, start: 'top top', end: 'bottom bottom', scrub: true } })
-      .fromTo(openingWindow, { width: '40%', height: '76%' }, { width: '100%', height: '100%', ease: 'none', duration: 0.75 })
-      .fromTo(openingImg, { scale: 1.15 }, { scale: 1, ease: 'none', duration: 0.75 }, 0)
+      .timeline({
+        scrollTrigger: {
+          trigger: openingEl,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+        },
+      })
+      .fromTo(
+        openingWindow,
+        { width: "40%", height: "76%" },
+        { width: "100%", height: "100%", ease: "none", duration: 0.75 },
+      )
+      .fromTo(
+        openingImg,
+        { scale: 1.15 },
+        { scale: 1, ease: "none", duration: 0.75 },
+        0,
+      )
       .to({}, { duration: 0.25 });
 
-    reveal('#gallery .gallery-head > *', '#gallery .gallery-head');
-    reveal('#gallery .gallery-shot', '#gallery .gallery-row', { y: 0, x: 120, stagger: 0.07, duration: 1, ease: 'expo.out' });
+    reveal("#gallery .gallery-head > *", "#gallery .gallery-head");
+    reveal("#gallery .gallery-shot", "#gallery .gallery-row", {
+      y: 0,
+      x: 120,
+      stagger: 0.07,
+      duration: 1,
+      ease: "expo.out",
+    });
 
-    reveal('#catalog .section-title', '#catalog');
-    reveal('#catalog .filter, #catalog .catalog-clear', '#catalog', { y: 0, top: 18, stagger: 0.06, delay: 0.1 });
-    reveal('#catalog .sheet', '#catalog', { y: 48, duration: 1, delay: 0.2 });
+    reveal("#catalog .section-title", "#catalog");
+    reveal("#catalog .filter, #catalog .catalog-clear", "#catalog", {
+      y: 0,
+      top: 18,
+      stagger: 0.06,
+      delay: 0.1,
+    });
+    reveal("#catalog .sheet", "#catalog", { y: 48, duration: 1, delay: 0.2 });
 
-    reveal('#location .location-card', '#location', { y: 40, duration: 0.9 });
-    reveal('#location .location-place', '#location', { y: 0, x: -16, stagger: 0.04, delay: 0.3 });
+    reveal("#location .location-card", "#location", { y: 40, duration: 0.9 });
+    reveal("#location .location-place", "#location", {
+      y: 0,
+      x: -16,
+      stagger: 0.04,
+      delay: 0.3,
+    });
 
-    reveal('#mortgage .section-title, #mortgage .mortgage-line', '#mortgage');
-    reveal('#mortgage .calc-control, #mortgage .mortgage-ask', '#mortgage .calc', { stagger: 0.09 });
-    reveal('#mortgage .mortgage-group, #mortgage .mortgage-photo', '#mortgage .mortgage-list', { stagger: 0.08 });
+    reveal("#mortgage .section-title, #mortgage .mortgage-line", "#mortgage");
+    reveal(
+      "#mortgage .calc-control, #mortgage .mortgage-ask",
+      "#mortgage .calc",
+      { stagger: 0.09 },
+    );
+    reveal(
+      "#mortgage .mortgage-group, #mortgage .mortgage-photo",
+      "#mortgage .mortgage-list",
+      { stagger: 0.08 },
+    );
 
-    reveal('#questions .section-title, #questions .questions-facts li', '#questions', { stagger: 0.06 });
-    reveal('#questions .faq-item', '#questions .faq', { y: 0, top: 16, stagger: 0.05 });
-    reveal('#questions .questions-tall', '#questions', { y: 0, clipPath: 'inset(0 0 100% 0)', duration: 1.2, ease: 'power4.inOut' });
-    reveal('#questions .questions-square', '#questions .questions-pics', { y: 60, delay: 0.5 });
+    reveal(
+      "#questions .section-title, #questions .questions-facts li",
+      "#questions",
+      { stagger: 0.06 },
+    );
+    reveal("#questions .faq-item", "#questions .faq", {
+      y: 0,
+      top: 16,
+      stagger: 0.05,
+    });
+    reveal("#questions .questions-tall", "#questions", {
+      y: 0,
+      clipPath: "inset(0 0 100% 0)",
+      duration: 1.2,
+      ease: "power4.inOut",
+    });
+    reveal("#questions .questions-square", "#questions .questions-pics", {
+      y: 60,
+      delay: 0.5,
+    });
 
-    reveal('#visit .visit-card', '#visit', { y: 56, duration: 1 });
+    reveal("#visit .visit-card", "#visit", { y: 56, duration: 1 });
 
-    reveal('#footer .footer-mark, #footer .footer-menu a', '#footer', { y: 0, top: 28, stagger: 0.06 });
-    reveal('#footer .footer-info > div, #footer .footer-legal p', '#footer .footer-info', { delay: 0.3 });
+    reveal("#footer .footer-mark, #footer .footer-menu a", "#footer", {
+      y: 0,
+      top: 28,
+      stagger: 0.06,
+    });
+    reveal(
+      "#footer .footer-info > div, #footer .footer-legal p",
+      "#footer .footer-info",
+      { delay: 0.3 },
+    );
   }
 
   let callbackOpen = false;
@@ -420,18 +601,18 @@
   let chatDock;
 
   const footerMenu = [
-    { label: 'Homes', href: '#catalog' },
-    { label: 'Location', href: '#location' },
-    { label: 'Mortgage', href: '#mortgage' },
-    { label: 'Progress', href: '#progress' },
-    { label: 'News', href: '#news' },
-    { label: 'Questions', href: '#questions' },
+    { label: "Homes", href: "#catalog" },
+    { label: "Location", href: "#location" },
+    { label: "Mortgage", href: "#mortgage" },
+    { label: "Progress", href: "#progress" },
+    { label: "News", href: "#news" },
+    { label: "Questions", href: "#questions" },
   ];
 
   const officeFacts = [
-    'Sales office, 1 Crane Walk, Larch Quay',
-    'Open daily, 10:00 to 19:00',
-    'Water tram to Larch Quay Pier, or bus 14 to Crane Walk',
+    "Sales office, 1 Crane Walk, Larch Quay",
+    "Open daily, 10:00 to 19:00",
+    "Water tram to Larch Quay Pier, or bus 14 to Crane Walk",
   ];
 
   function openLead() {
@@ -439,7 +620,7 @@
   }
 
   function closeCookies(value) {
-    localStorage.setItem('cookies', value);
+    localStorage.setItem("cookies", value);
     cookieVisible = false;
     tick().then(() => ScrollTrigger.refresh());
   }
@@ -453,38 +634,53 @@
   $: if (map && places.length) addMarkers(places);
 
   function paintMap() {
-    map.setPaintProperty('background', 'background-color', '#eeecea');
-    map.setPaintProperty('landuse_residential', 'fill-color', '#e8e5e1');
-    map.setPaintProperty('park', 'fill-color', '#dcdfd5');
-    map.setPaintProperty('landcover_wood', 'fill-color', '#d6dacf');
-    map.setPaintProperty('water', 'fill-color', '#c5cbc1');
-    map.setPaintProperty('waterway', 'line-color', '#c5cbc1');
-    map.setPaintProperty('building', 'fill-color', '#e1ddd8');
-    map.setPaintProperty('building', 'fill-outline-color', '#d6d1cb');
-    map.setPaintProperty('road_area_pier', 'fill-color', '#eeecea');
-    map.setPaintProperty('road_pier', 'line-color', '#eeecea');
-    map.setPaintProperty('water_name_point_label', 'text-color', '#6b6763');
-    map.setPaintProperty('water_name_line_label', 'text-color', '#6b6763');
-    ['highway-name-minor', 'highway-name-major', 'label_other', 'label_village', 'label_town', 'label_city'].forEach((id) => {
-      map.setPaintProperty(id, 'text-color', '#4a4846');
-      map.setPaintProperty(id, 'text-halo-color', '#eeecea');
+    map.setPaintProperty("background", "background-color", "#eeecea");
+    map.setPaintProperty("landuse_residential", "fill-color", "#e8e5e1");
+    map.setPaintProperty("park", "fill-color", "#dcdfd5");
+    map.setPaintProperty("landcover_wood", "fill-color", "#d6dacf");
+    map.setPaintProperty("water", "fill-color", "#c5cbc1");
+    map.setPaintProperty("waterway", "line-color", "#c5cbc1");
+    map.setPaintProperty("building", "fill-color", "#e1ddd8");
+    map.setPaintProperty("building", "fill-outline-color", "#d6d1cb");
+    map.setPaintProperty("road_area_pier", "fill-color", "#eeecea");
+    map.setPaintProperty("road_pier", "line-color", "#eeecea");
+    map.setPaintProperty("water_name_point_label", "text-color", "#6b6763");
+    map.setPaintProperty("water_name_line_label", "text-color", "#6b6763");
+    [
+      "highway-name-minor",
+      "highway-name-major",
+      "label_other",
+      "label_village",
+      "label_town",
+      "label_city",
+    ].forEach((id) => {
+      map.setPaintProperty(id, "text-color", "#4a4846");
+      map.setPaintProperty(id, "text-halo-color", "#eeecea");
     });
   }
 
   function addMarkers(list) {
     if (mapMarkers.length) return;
-    const quay = document.createElement('div');
-    quay.className = 'map-quay';
+    const quay = document.createElement("div");
+    quay.className = "map-quay";
     new maplibregl.Marker({ element: quay })
       .setLngLat(config.mapCenter)
-      .setPopup(new maplibregl.Popup({ offset: 16, closeButton: false }).setHTML('<strong>Larch Quay</strong><br>' + (config.address || '')))
+      .setPopup(
+        new maplibregl.Popup({ offset: 16, closeButton: false }).setHTML(
+          "<strong>Larch Quay</strong><br>" + (config.address || ""),
+        ),
+      )
       .addTo(map);
     list.forEach((place) => {
-      const dot = document.createElement('div');
-      dot.className = 'map-dot';
+      const dot = document.createElement("div");
+      dot.className = "map-dot";
       const marker = new maplibregl.Marker({ element: dot })
         .setLngLat(place.lngLat)
-        .setPopup(new maplibregl.Popup({ offset: 10, closeButton: false }).setHTML('<strong>' + place.name + '</strong><br>' + place.distance))
+        .setPopup(
+          new maplibregl.Popup({ offset: 10, closeButton: false }).setHTML(
+            "<strong>" + place.name + "</strong><br>" + place.distance,
+          ),
+        )
         .addTo(map);
       mapMarkers.push(marker);
     });
@@ -495,7 +691,12 @@
       if (n !== i && marker.getPopup().isOpen()) marker.togglePopup();
     });
     mapActive = i;
-    map.flyTo({ center: places[i].lngLat, zoom: 15.2, speed: 0.9, padding: { left: 640 } });
+    map.flyTo({
+      center: places[i].lngLat,
+      zoom: 15.2,
+      speed: 0.9,
+      padding: { left: 640 },
+    });
     if (!mapMarkers[i].getPopup().isOpen()) mapMarkers[i].togglePopup();
   }
 
@@ -509,38 +710,40 @@
   let rateIndex = rates.indexOf(mortgage.defaults.rate);
   let calcFlats = [];
   let calcRows = [];
-  const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
   function figure(value) {
-    return perMonth(value).replace(' a month', '').split('');
+    return perMonth(value).replace(" a month", "").split("");
   }
 
   const calcGroups = [
-    { rooms: 0, title: 'Studios', label: 'Studio' },
-    { rooms: 1, title: 'One bedroom', label: '1 bedroom' },
-    { rooms: 2, title: 'Two bedrooms', label: '2 bedrooms' },
-    { rooms: 3, title: 'Three bedrooms', label: '3 bedrooms' },
-    { rooms: 4, title: 'Four bedrooms', label: '4 bedrooms' },
+    { rooms: 0, title: "Studios", label: "Studio" },
+    { rooms: 1, title: "One bedroom", label: "1 bedroom" },
+    { rooms: 2, title: "Two bedrooms", label: "2 bedrooms" },
+    { rooms: 3, title: "Three bedrooms", label: "3 bedrooms" },
+    { rooms: 4, title: "Four bedrooms", label: "4 bedrooms" },
   ];
 
   function pickFlats(list) {
     const best = {};
     list.forEach((flat) => {
-      if (flat.status !== 'free') return;
-      const key = flat.rooms + '-' + flat.building;
+      if (flat.status !== "free") return;
+      const key = flat.rooms + "-" + flat.building;
       if (!best[key] || flat.price < best[key].price) {
         best[key] = flat;
       }
     });
-    return Object.values(best).sort((a, b) => a.rooms - b.rooms || a.price - b.price);
+    return Object.values(best).sort(
+      (a, b) => a.rooms - b.rooms || a.price - b.price,
+    );
   }
 
   function onCalc(e) {
     if (e) {
       const el = e.target;
-      if (el.name === 'deposit') deposit = Number(el.value);
-      if (el.name === 'term') term = Number(el.value);
-      if (el.name === 'rate') rateIndex = Number(el.value);
+      if (el.name === "deposit") deposit = Number(el.value);
+      if (el.name === "term") term = Number(el.value);
+      if (el.name === "rate") rateIndex = Number(el.value);
     }
     const rate = rates[rateIndex];
     const minTerm = terms[0];
@@ -587,31 +790,35 @@
   }
 
   // visit
-  let visitName = '';
-  let visitPhone = '';
-  let visitTime = '';
+  let visitName = "";
+  let visitPhone = "";
+  let visitTime = "";
   let visitSent = false;
-  let visitMessage = '';
+  let visitMessage = "";
 
   function sendVisit() {
-    const res = getJSONSync('/api/lead.json');
-    window.appState.user = { name: visitName, phone: visitPhone, time: visitTime };
+    const res = getJSONSync("/api/lead.json");
+    window.appState.user = {
+      name: visitName,
+      phone: visitPhone,
+      time: visitTime,
+    };
     visitSent = res.ok;
     visitMessage = res.message || visit.success;
   }
 
   function hoursDays(line) {
-    return line.slice(0, line.lastIndexOf(' '));
+    return line.slice(0, line.lastIndexOf(" "));
   }
 
   function hoursTime(line) {
-    return line.slice(line.lastIndexOf(' ') + 1);
+    return line.slice(line.lastIndexOf(" ") + 1);
   }
 
   onMount(() => {
-    getJSON('/api/sections.json').then((data) => {
+    getJSON("/api/sections.json").then((data) => {
       sections = data;
-      heroBg.style.backgroundImage = 'url(' + window.appConfig.heroImage + ')';
+      heroBg.style.backgroundImage = "url(" + window.appConfig.heroImage + ")";
       tick().then(() => {
         onScroll();
         motion();
@@ -619,23 +826,24 @@
       });
     });
 
-    getJSON('/api/flats.json').then((list) => {
+    getJSON("/api/flats.json").then((list) => {
       flats = list;
       flatsStore.set(list);
       window.appState.flats = list;
+      calcFlats = list;
+      onCalc();
+      preparePayments(list);
       tick().then(() => ScrollTrigger.refresh());
       list.forEach((flat) => {
-        getJSON('/api/flats/' + flat.id + '.json').then((data) => {
+        getJSON("/api/flats/" + flat.id + ".json").then((data) => {
           Object.assign(flat, data);
           flats = flats;
         });
       });
     });
 
-    getJSON('/api/flats.json?v=2').then(preparePayments);
-
     setInterval(() => {
-      getJSON('/api/prices.json').then((data) => {
+      getJSON("/api/prices.json").then((data) => {
         const map = {};
         data.items.forEach((p) => {
           map[p.id] = p.price;
@@ -653,20 +861,20 @@
 
     ScrollTrigger.create({
       trigger: heroStage,
-      start: 'top top',
-      end: '+=200%',
+      start: "top top",
+      end: "+=200%",
       pin: true,
     });
 
     document.fonts.ready.then(intro);
 
-    window.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', onResize);
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
 
     try {
       gallerySwiper = new Swiper(galleryEl, {
         modules: [FreeMode],
-        slidesPerView: 'auto',
+        slidesPerView: "auto",
         spaceBetween: 12,
         slidesOffsetBefore: 32,
         slidesOffsetAfter: 32,
@@ -686,10 +894,6 @@
       }
     }, 4500);
 
-    getJSON('/api/flats.json?_=' + Date.now()).then((list) => {
-      calcFlats = list;
-      onCalc();
-    });
 
     map = new maplibregl.Map({
       container: mapEl,
@@ -700,22 +904,30 @@
       attributionControl: { compact: false },
     });
     map.setPadding({ left: 640 });
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-    map.on('load', paintMap);
+    map.addControl(
+      new maplibregl.NavigationControl({ showCompass: false }),
+      "bottom-right",
+    );
+    map.on("load", paintMap);
 
-    getJSON('/api/news.json').then((list) => {
+    getJSON("/api/news.json").then((list) => {
       news = list;
       tick().then(() => {
-        reveal('#news .section-title', '#news');
-        reveal('#news .news-item', '#news .news-list', { stagger: 0.07 });
-        reveal('#news .news-photo', '#news', { y: 0, clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'power4.inOut' });
+        reveal("#news .section-title", "#news");
+        reveal("#news .news-item", "#news .news-list", { stagger: 0.07 });
+        reveal("#news .news-photo", "#news", {
+          y: 0,
+          clipPath: "inset(0 0 100% 0)",
+          duration: 1.1,
+          ease: "power4.inOut",
+        });
         ScrollTrigger.refresh();
       });
     });
 
-    window.addEventListener('scroll', onNewsScroll);
+    window.addEventListener("scroll", onNewsScroll);
 
-    if (!localStorage.getItem('cookies')) {
+    if (!localStorage.getItem("cookies")) {
       setTimeout(() => {
         cookieVisible = true;
         tick().then(() => ScrollTrigger.refresh());
@@ -723,7 +935,7 @@
     }
 
     setTimeout(() => {
-      const chat = document.querySelector('.cw-btn');
+      const chat = document.querySelector(".cw-btn");
       if (chat) {
         chatDock.appendChild(chat);
       }
@@ -733,10 +945,20 @@
 
 {#if cookieVisible}
   <div class="cookie">
-    <p class="cookie-text">{cookie.text || ''}</p>
+    <p class="cookie-text">{cookie.text || ""}</p>
     <div class="cookie-actions">
-      <button class="cookie-btn" type="button" on:click={() => closeCookies('accepted')}>{cookie.accept || 'Accept'}</button>
-      <button class="cookie-link" type="button" on:click={() => closeCookies('settings')}>{cookie.settings || 'Settings'}</button>
+      <button
+        class="cookie-btn"
+        type="button"
+        on:click={() => closeCookies("accepted")}
+        >{cookie.accept || "Accept"}</button
+      >
+      <button
+        class="cookie-link"
+        type="button"
+        on:click={() => closeCookies("settings")}
+        >{cookie.settings || "Settings"}</button
+      >
     </div>
   </div>
 {/if}
@@ -750,15 +972,27 @@
     <a class="link-line" href="#progress">Progress</a>
     <a class="link-line" href="#questions">Questions</a>
   </nav>
-  <a class="top-phone link-line" href={phoneHref} style="margin-left: 40px">{phone}</a>
-  <a class="top-call link-line" href="#visit" on:click|preventDefault={openCallback}>Call me back</a>
-  <a class="btn btn-accent top-btn" href="#visit" style="margin-left: 28px">Book a viewing</a>
+  <a class="top-phone link-line" href={phoneHref} style="margin-left: 40px"
+    >{phone}</a
+  >
+  <a
+    class="top-call link-line"
+    href="#visit"
+    on:click|preventDefault={openCallback}>Call me back</a
+  >
+  <a class="btn btn-accent top-btn" href="#visit" style="margin-left: 28px"
+    >Book a viewing</a
+  >
 </header>
 
 <main>
   <section id="hero" class="hero" bind:this={heroEl}>
     <div class="hero-stage" bind:this={heroStage}>
-      <div class="hero-bg" bind:this={heroBg} style="background-color: #c6c7c6"></div>
+      <div
+        class="hero-bg"
+        bind:this={heroBg}
+        style="background-color: #c6c7c6"
+      ></div>
       <video
         class="hero-video"
         bind:this={heroVideo}
@@ -776,26 +1010,48 @@
         <span class="hero-line hero-line-2">Quay</span>
       </h1>
       <div class="hero-copy" bind:this={heroCopy}>
-        <p style="max-width: 36ch">Homes on the old timber quay, nine minutes by water tram from the old town.</p>
-        <a class="btn btn-accent" href="#catalog" style="margin-top: 28px">See the homes</a>
+        <p style="max-width: 36ch">
+          Homes on the old timber quay, nine minutes by water tram from the old
+          town.
+        </p>
+        <a class="btn btn-accent" href="#catalog" style="margin-top: 28px"
+          >See the homes</a
+        >
       </div>
     </div>
   </section>
 
   <section id="about" class="about wrap">
-    <h2 class="section-title">{about.title || ''}</h2>
-    <div class="about-lead" style="margin-top: 24px">{@html aboutParts[0] || ''}</div>
+    <h2 class="section-title">{about.title || ""}</h2>
+    <div class="about-lead" style="margin-top: 24px">
+      {@html aboutParts[0] || ""}
+    </div>
 
     <div class="row g-3 about-mosaic" style="margin-top: 72px">
       <div class="col-8">
-        <div class="about-photo" bind:this={aboutPhoto} style="aspect-ratio: 16 / 10">
-          <img src={quayAerial} alt="Larch Quay from the air: four buildings, the Larch Store and three cranes on the granite edge" bind:this={aboutImg} />
-          <div class="about-paper" style="width: 320px">{@html aboutParts[1] || ''}</div>
+        <div
+          class="about-photo"
+          bind:this={aboutPhoto}
+          style="aspect-ratio: 16 / 10"
+        >
+          <img
+            src={quayAerial}
+            alt="Larch Quay from the air: four buildings, the Larch Store and three cranes on the granite edge"
+            bind:this={aboutImg}
+          />
+          <div class="about-paper" style="width: 320px">
+            {@html aboutParts[1] || ""}
+          </div>
         </div>
       </div>
       <div class="col-4">
         <div class="about-tile" style="aspect-ratio: 448 / 342">
-          <svg viewBox="0 0 440 340" preserveAspectRatio="xMidYMid slice" role="img" aria-label={about.mapLabel || ''}>
+          <svg
+            viewBox="0 0 440 340"
+            preserveAspectRatio="xMidYMid slice"
+            role="img"
+            aria-label={about.mapLabel || ""}
+          >
             <path
               class="about-water"
               fill-rule="evenodd"
@@ -820,7 +1076,7 @@
         <div class="ratio ratio-16x9">
           <iframe
             src="https://www.youtube.com/embed/{config.youtubeId}?rel=0"
-            title={film.title || 'The quay at dusk'}
+            title={film.title || "The quay at dusk"}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
             style="border: 0"
@@ -828,8 +1084,10 @@
         </div>
       </div>
       <div class="col-4 about-film-text">
-        <p class="about-film-title"><em>{film.title || ''}</em></p>
-        <p class="about-film-caption" style="margin-top: 20px">{film.caption || ''}</p>
+        <p class="about-film-title"><em>{film.title || ""}</em></p>
+        <p class="about-film-caption" style="margin-top: 20px">
+          {film.caption || ""}
+        </p>
       </div>
     </div>
   </section>
@@ -838,7 +1096,9 @@
     <div class="row">
       <div class="col-4">
         <div class="features-head">
-          <h2 class="section-title features-title">Built around<br />the water</h2>
+          <h2 class="section-title features-title">
+            Built around<br />the water
+          </h2>
         </div>
       </div>
       <div class="col-8">
@@ -846,16 +1106,27 @@
           <div class="row feature-row">
             <div class="col-6">
               <h3 class="feature-title">
-                <img class="feature-icon" src={icons[adv.icon]} alt="" style="width: 24px; height: 24px" />
+                <img
+                  class="feature-icon"
+                  src={icons[adv.icon]}
+                  alt=""
+                  style="width: 24px; height: 24px"
+                />
                 {adv.title}
               </h3>
               <p class="feature-text">{@html adv.text}</p>
             </div>
             <div class="col-6 feature-side">
-              <div class="feature-photo" style="width: {photoSizes[i % 3].w}px; aspect-ratio: {photoReady[i] ? photoSizes[i % 3].ratio : 'auto'}">
+              <div
+                class="feature-photo"
+                style="width: {photoSizes[i % 3]
+                  .w}px; aspect-ratio: {photoReady[i]
+                  ? photoSizes[i % 3].ratio
+                  : 'auto'}"
+              >
                 <img
-                  src={featurePhotos[i] ? featurePhotos[i].src : ''}
-                  alt={featurePhotos[i] ? featurePhotos[i].alt : ''}
+                  src={featurePhotos[i] ? featurePhotos[i].src : ""}
+                  alt={featurePhotos[i] ? featurePhotos[i].alt : ""}
                   on:load={() => (photoReady[i] = true)}
                 />
               </div>
@@ -870,7 +1141,11 @@
     <div class="opening" bind:this={openingEl}>
       <div class="opening-stage">
         <div class="opening-window" bind:this={openingWindow}>
-          <img src="/media/photos/crane-dusk.png" alt="A restored portal crane lit on the quay at dusk" bind:this={openingImg} />
+          <img
+            src="/media/photos/crane-dusk.png"
+            alt="A restored portal crane lit on the quay at dusk"
+            bind:this={openingImg}
+          />
         </div>
       </div>
     </div>
@@ -881,14 +1156,26 @@
     <div class="swiper gallery-row" bind:this={galleryEl}>
       <div class="swiper-wrapper">
         {#each galleryModules as m}
-          {#if m.type === 'tall'}
-            <div class="swiper-slide gallery-module" style="width: calc(68vh * 3 / 4); height: 68vh">
-              <div class="gallery-shot" on:click={() => openLightbox(m.items[0])}>
-                <img src={gallery[m.items[0]].src} alt={gallery[m.items[0]].alt} />
+          {#if m.type === "tall"}
+            <div
+              class="swiper-slide gallery-module"
+              style="width: calc(68vh * 3 / 4); height: 68vh"
+            >
+              <div
+                class="gallery-shot"
+                on:click={() => openLightbox(m.items[0])}
+              >
+                <img
+                  src={gallery[m.items[0]].src}
+                  alt={gallery[m.items[0]].alt}
+                />
               </div>
             </div>
-          {:else if m.type === 'pair'}
-            <div class="swiper-slide gallery-module gallery-pair" style="width: calc((68vh - 12px) / 2 * 4 / 3); height: 68vh">
+          {:else if m.type === "pair"}
+            <div
+              class="swiper-slide gallery-module gallery-pair"
+              style="width: calc((68vh - 12px) / 2 * 4 / 3); height: 68vh"
+            >
               {#each m.items as idx}
                 <div class="gallery-shot" on:click={() => openLightbox(idx)}>
                   <img src={gallery[idx].src} alt={gallery[idx].alt} />
@@ -896,9 +1183,18 @@
               {/each}
             </div>
           {:else}
-            <div class="swiper-slide gallery-module" style="width: calc(68vh * 16 / 10); height: 68vh">
-              <div class="gallery-shot" on:click={() => openLightbox(m.items[0])}>
-                <img src={gallery[m.items[0]].src} alt={gallery[m.items[0]].alt} />
+            <div
+              class="swiper-slide gallery-module"
+              style="width: calc(68vh * 16 / 10); height: 68vh"
+            >
+              <div
+                class="gallery-shot"
+                on:click={() => openLightbox(m.items[0])}
+              >
+                <img
+                  src={gallery[m.items[0]].src}
+                  alt={gallery[m.items[0]].alt}
+                />
               </div>
             </div>
           {/if}
@@ -918,8 +1214,13 @@
             <p class="filter-label">Bedrooms</p>
             <div class="chips">
               {#each roomOptions as r}
-                <button type="button" class="chip" class:chip-on={rooms.indexOf(r) > -1} on:click={() => toggleRooms(r)}>
-                  {r === 0 ? 'Studio' : r}
+                <button
+                  type="button"
+                  class="chip"
+                  class:chip-on={rooms.indexOf(r) > -1}
+                  on:click={() => toggleRooms(r)}
+                >
+                  {r === 0 ? "Studio" : r}
                 </button>
               {/each}
             </div>
@@ -928,44 +1229,95 @@
           <div class="filter">
             <p class="filter-label">Area, m²</p>
             <div class="pair">
-              <input class="field" type="number" placeholder="from" bind:value={areaFrom} />
-              <input class="field" type="number" placeholder="to" bind:value={areaTo} />
+              <input
+                class="field"
+                type="number"
+                placeholder="from"
+                bind:value={areaFrom}
+              />
+              <input
+                class="field"
+                type="number"
+                placeholder="to"
+                bind:value={areaTo}
+              />
             </div>
           </div>
 
           <div class="filter">
             <p class="filter-label">Price, £</p>
             <div class="pair">
-              <input class="field" type="number" placeholder="from" bind:value={priceFrom} />
-              <input class="field" type="number" placeholder="to" bind:value={priceTo} />
+              <input
+                class="field"
+                type="number"
+                placeholder="from"
+                bind:value={priceFrom}
+              />
+              <input
+                class="field"
+                type="number"
+                placeholder="to"
+                bind:value={priceTo}
+              />
             </div>
           </div>
 
           <div class="filter">
             <p class="filter-label">Floor</p>
             <div class="pair">
-              <input class="field" type="number" placeholder="from" bind:value={floorFrom} />
-              <input class="field" type="number" placeholder="to" bind:value={floorTo} />
+              <input
+                class="field"
+                type="number"
+                placeholder="from"
+                bind:value={floorFrom}
+              />
+              <input
+                class="field"
+                type="number"
+                placeholder="to"
+                bind:value={floorTo}
+              />
             </div>
           </div>
 
           <div class="filter" style="margin-top: 28px">
-            <input class="field" type="text" placeholder="Home number, for example QS-1204" value={query} on:input={onSearch} />
+            <input
+              class="field"
+              type="text"
+              placeholder="Home number, for example QS-1204"
+              value={query}
+              on:input={onSearch}
+            />
           </div>
 
           <div class="filter" style="margin-top: 8px">
-            <select class="field field-select" bind:value={sort} aria-label="Sort">
+            <select
+              class="field field-select"
+              bind:value={sort}
+              aria-label="Sort"
+            >
               {#each sorts as s}
                 <option value={s.value}>{s.label}</option>
               {/each}
             </select>
           </div>
 
-          <a class="catalog-clear link-line" href="#catalog" on:click|preventDefault={clearFilters}>Clear filters</a>
+          <a
+            class="catalog-clear link-line"
+            href="#catalog"
+            on:click|preventDefault={clearFilters}>Clear filters</a
+          >
         </div>
       </div>
       <div class="col-8">
-        <FlatList {groups} total={flats.length} {favorites} {config} onOpen={openFlat} onFavorite={toggleFavorite} />
+        <FlatList
+          {groups}
+          total={flats.length}
+          {favorites}
+          {config}
+          onOpen={openFlat}
+          onFavorite={toggleFavorite}
+        />
       </div>
     </div>
   </section>
@@ -975,7 +1327,11 @@
       <h2 class="location-title">Around the quay</h2>
       <ul class="location-list" style="margin-top: 28px">
         {#each places as place, i}
-          <li class="location-place" class:location-place-on={mapActive === i} on:click={() => flyToPlace(i)}>
+          <li
+            class="location-place"
+            class:location-place-on={mapActive === i}
+            on:click={() => flyToPlace(i)}
+          >
             <span class="location-name">{place.name}</span>
             <span class="location-time">{place.distance}</span>
           </li>
@@ -988,7 +1344,10 @@
     <div class="row">
       <div class="col-3 mortgage-side">
         <h2 class="section-title">Monthly payments</h2>
-        <p class="mortgage-line" style="margin-top: 28px">Prices from the catalogue, shown as a monthly repayment. Rates are indicative.</p>
+        <p class="mortgage-line" style="margin-top: 28px">
+          Prices from the catalogue, shown as a monthly repayment. Rates are
+          indicative.
+        </p>
 
         <div class="calc" style="margin-top: 56px">
           <label class="calc-control">
@@ -1008,16 +1367,38 @@
           <label class="calc-control">
             <span class="calc-label">Term</span>
             <span class="calc-value">{term} years</span>
-            <input class="calc-range" type="range" name="term" min={terms[0]} max={terms[terms.length - 1]} step="1" value={term} on:input={onCalc} />
+            <input
+              class="calc-range"
+              type="range"
+              name="term"
+              min={terms[0]}
+              max={terms[terms.length - 1]}
+              step="1"
+              value={term}
+              on:input={onCalc}
+            />
           </label>
           <label class="calc-control">
             <span class="calc-label">Rate</span>
             <span class="calc-value">{rates[rateIndex]} %</span>
-            <input class="calc-range" type="range" name="rate" min="0" max={rates.length - 1} step="1" value={rateIndex} on:input={onCalc} />
+            <input
+              class="calc-range"
+              type="range"
+              name="rate"
+              min="0"
+              max={rates.length - 1}
+              step="1"
+              value={rateIndex}
+              on:input={onCalc}
+            />
           </label>
         </div>
 
-        <a class="link-line mortgage-ask" href="#visit" on:click|preventDefault={openCallback}>Ask about a mortgage</a>
+        <a
+          class="link-line mortgage-ask"
+          href="#visit"
+          on:click|preventDefault={openCallback}>Ask about a mortgage</a
+        >
       </div>
 
       <div class="offset-1 col-8">
@@ -1030,10 +1411,21 @@
                   <div class="mortgage-row">
                     <div class="mortgage-row-main">
                       <span>{group.label}, {area(row.area)}</span>
-                      <span class="mortgage-pay" aria-label={perMonth(row.monthly)}>
+                      <span
+                        class="mortgage-pay"
+                        aria-label={perMonth(row.monthly)}
+                      >
                         {#each figure(row.monthly) as ch, k}
                           {#if digits.indexOf(ch) > -1}
-                            <span class="roll-col" aria-hidden="true"><span class="roll-strip" style="top: -{Number(ch) * 1.4}em; transition-delay: {k * 45}ms">{#each digits as d}<span>{d}</span>{/each}</span></span>
+                            <span class="roll-col" aria-hidden="true"
+                              ><span
+                                class="roll-strip"
+                                style="top: -{Number(ch) *
+                                  1.4}em; transition-delay: {k * 45}ms"
+                                >{#each digits as d}<span>{d}</span
+                                  >{/each}</span
+                              ></span
+                            >
                           {:else}
                             <span aria-hidden="true">{ch}</span>
                           {/if}
@@ -1041,14 +1433,19 @@
                         <span aria-hidden="true">&nbsp;a month</span>
                       </span>
                     </div>
-                    <p class="mortgage-row-note">{pounds(row.price)} in {row.building}</p>
+                    <p class="mortgage-row-note">
+                      {pounds(row.price)} in {row.building}
+                    </p>
                   </div>
                 {/if}
               {/each}
             </div>
           {/each}
           <div class="mortgage-photo">
-            <img src={interior1} alt="A kitchen with windows from floor to ceiling, looking into the courtyard birches" />
+            <img
+              src={interior1}
+              alt="A kitchen with windows from floor to ceiling, looking into the courtyard birches"
+            />
           </div>
         </div>
       </div>
@@ -1058,7 +1455,10 @@
   <section id="progress" class="progress-section">
     <div class="progress-panel">
       {#if construction.length}
-        <img class="progress-img progress-img-on" src={construction[construction.length - 1].photos[0]} />
+        <img
+          class="progress-img progress-img-on"
+          src={construction[construction.length - 1].photos[0]}
+        />
       {/if}
       <div class="progress-shade"></div>
       <div class="progress-band">
@@ -1074,7 +1474,9 @@
             class="progress-img"
             class:progress-img-on={progressAir[i] ? n === 0 : n === 1}
             src={photo}
-            alt={monthTitle(item.month) + ', ' + (n === 0 ? 'from the air' : 'on the ground')}
+            alt={monthTitle(item.month) +
+              ", " +
+              (n === 0 ? "from the air" : "on the ground")}
           />
         {/each}
         <div class="progress-shade"></div>
@@ -1084,8 +1486,16 @@
           <div class="progress-fact">{@html item.html}</div>
         </div>
         <div class="progress-switch">
-          <button type="button" class:progress-switch-on={!progressAir[i]} on:click={() => showShot(i, false)}>On the ground</button>
-          <button type="button" class:progress-switch-on={progressAir[i]} on:click={() => showShot(i, true)}>From the air</button>
+          <button
+            type="button"
+            class:progress-switch-on={!progressAir[i]}
+            on:click={() => showShot(i, false)}>On the ground</button
+          >
+          <button
+            type="button"
+            class:progress-switch-on={progressAir[i]}
+            on:click={() => showShot(i, true)}>From the air</button
+          >
         </div>
       </div>
     {/each}
@@ -1096,7 +1506,11 @@
       <div class="col-5">
         <div class="news-photo">
           {#each news as item, i}
-            <img class:news-photo-on={i === newsActive} src={item.image} alt={item.title} />
+            <img
+              class:news-photo-on={i === newsActive}
+              src={item.image}
+              alt={item.title}
+            />
           {/each}
         </div>
       </div>
@@ -1138,22 +1552,34 @@
                 <span class="faq-chevron"></span>
               </div>
               {#if faqOpen === i}
-                <div class="faq-a" transition:slide={{ duration: 320 }}>{@html item.a}</div>
+                <div class="faq-a" transition:slide={{ duration: 320 }}>
+                  {@html item.a}
+                </div>
               {/if}
             </div>
           {/each}
         </div>
 
         <div class="questions-actions" style="margin-top: 40px">
-          <button class="btn btn-accent" type="button" on:click={openLead}>Book a viewing</button>
-          <a class="link-line" href="#visit" on:click|preventDefault={openCallback} style="margin-left: 28px">Call me back</a>
+          <button class="btn btn-accent" type="button" on:click={openLead}
+            >Book a viewing</button
+          >
+          <a
+            class="link-line"
+            href="#visit"
+            on:click|preventDefault={openCallback}
+            style="margin-left: 28px">Call me back</a
+          >
         </div>
       </div>
 
       <div class="offset-1 col-6">
         <div class="questions-pics">
           <div class="questions-tall">
-            <img src="/media/photos/interior-living.png" alt="A living room in Quayside looking out over the water" />
+            <img
+              src="/media/photos/interior-living.png"
+              alt="A living room in Quayside looking out over the water"
+            />
           </div>
           <div class="questions-square">
             <img src="/media/photos/facade-detail.png" />
@@ -1164,10 +1590,16 @@
   </section>
 
   <section id="visit" class="visit">
-    <img class="visit-photo" src="/media/photos/dusk-promenade.png" alt="The promenade along the granite edge at dusk" />
+    <img
+      class="visit-photo"
+      src="/media/photos/dusk-promenade.png"
+      alt="The promenade along the granite edge at dusk"
+    />
     <div class="visit-card">
-      <h2 class="visit-title">{visit.title || ''}</h2>
-      <p class="visit-address" style="margin-top: 18px">{visit.address || ''}</p>
+      <h2 class="visit-title">{visit.title || ""}</h2>
+      <p class="visit-address" style="margin-top: 18px">
+        {visit.address || ""}
+      </p>
       <dl class="visit-hours" style="margin-top: 20px">
         {#each visit.hours || [] as line}
           <div>
@@ -1177,13 +1609,37 @@
         {/each}
       </dl>
       <p class="visit-phone" style="margin-top: 16px">
-        <a class="link-line" href={'tel:' + (visit.phone || '').replace(/\s/g, '')}>{visit.phone || ''}</a>
+        <a
+          class="link-line"
+          href={"tel:" + (visit.phone || "").replace(/\s/g, "")}
+          >{visit.phone || ""}</a
+        >
       </p>
 
-      <form class="visit-form" on:submit|preventDefault={sendVisit} style="margin-top: 28px">
-        <input class="visit-field" type="text" name="name" placeholder={visitFields.name} bind:value={visitName} />
-        <input class="visit-field" type="tel" name="phone" placeholder={visitFields.phone} bind:value={visitPhone} />
-        <select class="visit-field visit-select" name="time" bind:value={visitTime}>
+      <form
+        class="visit-form"
+        on:submit|preventDefault={sendVisit}
+        style="margin-top: 28px"
+      >
+        <input
+          class="visit-field"
+          type="text"
+          name="name"
+          placeholder={visitFields.name}
+          bind:value={visitName}
+        />
+        <input
+          class="visit-field"
+          type="tel"
+          name="phone"
+          placeholder={visitFields.phone}
+          bind:value={visitPhone}
+        />
+        <select
+          class="visit-field visit-select"
+          name="time"
+          bind:value={visitTime}
+        >
           <option value="">{visitFields.time}</option>
           {#each visitFields.timeOptions || [] as option}
             <option value={option}>{option}</option>
@@ -1192,9 +1648,11 @@
         {#if visitSent}
           <p class="visit-done">{visitMessage}</p>
         {:else}
-          <p class="visit-note">{visit.note || ''}</p>
+          <p class="visit-note">{visit.note || ""}</p>
         {/if}
-        <button class="btn btn-accent visit-btn" type="submit">{visit.button || ''}</button>
+        <button class="btn btn-accent visit-btn" type="submit"
+          >{visit.button || ""}</button
+        >
       </form>
     </div>
   </section>
@@ -1212,9 +1670,15 @@
       </nav>
       <div class="footer-info" style="margin-top: 64px">
         <div class="footer-contact">
-          <a class="link-line" href={'tel:' + (contact.phone || '').replace(/\s/g, '')}>{contact.phone || ''}</a>
-          <a class="link-line" href={'mailto:' + (contact.email || '')}>{contact.email || ''}</a>
-          <span>{contact.address || ''}</span>
+          <a
+            class="link-line"
+            href={"tel:" + (contact.phone || "").replace(/\s/g, "")}
+            >{contact.phone || ""}</a
+          >
+          <a class="link-line" href={"mailto:" + (contact.email || "")}
+            >{contact.email || ""}</a
+          >
+          <span>{contact.address || ""}</span>
         </div>
         <div class="footer-social">
           {#each footer.social || [] as item}
@@ -1223,8 +1687,8 @@
         </div>
       </div>
       <div class="footer-legal">
-        <p>{footer.legal || ''}</p>
-        <p>{footer.credits || ''}</p>
+        <p>{footer.legal || ""}</p>
+        <p>{footer.credits || ""}</p>
         <div class="footer-chat" bind:this={chatDock}></div>
       </div>
     </div>
@@ -1236,7 +1700,13 @@
 {/if}
 
 {#if activeFlat}
-  <FlatModal flat={activeFlat} {favorites} {config} onOpen={openFlat} onFavorite={toggleFavorite} />
+  <FlatModal
+    flat={activeFlat}
+    {favorites}
+    {config}
+    onOpen={openFlat}
+    onFavorite={toggleFavorite}
+  />
 {/if}
 
 {#if leadOpen}
@@ -1345,7 +1815,11 @@
     left: 0;
     width: 62%;
     height: 52%;
-    background: radial-gradient(ellipse at 0% 0%, rgba(238, 236, 234, 0.62) 0%, rgba(238, 236, 234, 0) 70%);
+    background: radial-gradient(
+      ellipse at 0% 0%,
+      rgba(238, 236, 234, 0.62) 0%,
+      rgba(238, 236, 234, 0) 70%
+    );
   }
 
   .hero-scrim-bottom {
@@ -1353,7 +1827,11 @@
     bottom: 0;
     width: 80%;
     height: 52%;
-    background: radial-gradient(ellipse at 100% 100%, rgba(238, 236, 234, 0.62) 0%, rgba(238, 236, 234, 0) 70%);
+    background: radial-gradient(
+      ellipse at 100% 100%,
+      rgba(238, 236, 234, 0.62) 0%,
+      rgba(238, 236, 234, 0) 70%
+    );
   }
 
   .hero-title {
@@ -1742,7 +2220,10 @@
     font-size: var(--step-body);
     line-height: 1;
     cursor: pointer;
-    transition: background-color 160ms ease, color 160ms ease, transform 140ms var(--ease-out);
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      transform 140ms var(--ease-out);
     will-change: transform;
   }
 
@@ -1785,7 +2266,9 @@
     font-variant-numeric: tabular-nums;
     -moz-appearance: textfield;
     appearance: textfield;
-    transition: background-color 160ms ease, outline-color 160ms ease;
+    transition:
+      background-color 160ms ease,
+      outline-color 160ms ease;
   }
 
   .field::placeholder {
@@ -1833,7 +2316,7 @@
     padding: 0 var(--margin);
     background: #ffffff;
     color: #333333;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: "Montserrat", Arial, sans-serif;
     font-size: 13px;
     line-height: 1.45;
   }
@@ -1854,11 +2337,13 @@
     padding: 0 16px;
     border: 0;
     border-radius: 0;
-    font-family: 'Montserrat', Arial, sans-serif !important;
+    font-family: "Montserrat", Arial, sans-serif !important;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 160ms ease, transform 140ms var(--ease-out);
+    transition:
+      background-color 160ms ease,
+      transform 140ms var(--ease-out);
   }
 
   .cookie-btn {
@@ -1905,7 +2390,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: calc(var(--margin) + (100% - 2 * var(--margin) - 3 * var(--gutter)) / 4 + var(--gutter));
+    left: calc(
+      var(--margin) + (100% - 2 * var(--margin) - 3 * var(--gutter)) / 4 +
+        var(--gutter)
+    );
     width: calc((100% - 2 * var(--margin) - 3 * var(--gutter)) / 4);
     height: max-content;
     min-height: 52vh;
@@ -2086,7 +2574,9 @@
     background: var(--ink);
     -webkit-appearance: none;
     appearance: none;
-    transition: transform 140ms var(--ease-out), background-color 160ms ease;
+    transition:
+      transform 140ms var(--ease-out),
+      background-color 160ms ease;
   }
 
   .calc-range::-moz-range-thumb {
@@ -2303,7 +2793,10 @@
     color: rgba(247, 245, 242, 0.62);
     font-size: 15px;
     cursor: pointer;
-    transition: background-color 200ms ease, color 200ms ease, transform 140ms var(--ease-out);
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      transform 140ms var(--ease-out);
   }
 
   .progress-switch button:hover {
@@ -2408,7 +2901,7 @@
   }
 
   .news-text :global(p + p)::before {
-    content: ' ';
+    content: " ";
   }
 
   .questions {
@@ -2460,7 +2953,7 @@
 
   .faq-chevron::before,
   .faq-chevron::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 6px;
     width: 9px;
@@ -2716,7 +3209,9 @@
     font-weight: 500;
     line-height: 1;
     letter-spacing: -0.025em;
-    transition: left 0.35s var(--ease-out), color 0.2s ease;
+    transition:
+      left 0.35s var(--ease-out),
+      color 0.2s ease;
     will-change: left;
   }
 
