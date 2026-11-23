@@ -1,19 +1,46 @@
 # Larch Quay
 
-Landing page for the Larch Quay residential quarter.
+Адаптивный сайт жилого комплекса Larch Quay на Svelte и Vite.
 
-## Requirements
+## Требования
 
-- Node 24
+- Node.js 24 или новее
+- npm
 
-## Setup
+## Установка
 
-```
+```bash
 npm install
 ```
 
-## Commands
+## Запуск проекта
 
-- `npm run dev` starts the dev server on http://localhost:5173
-- `npm run build` creates a production build in `dist`
-- `npm run preview` serves the production build on http://localhost:4173
+```bash
+npm run dev
+```
+
+Локальный адрес: http://localhost:5173
+
+## Сборка проекта
+
+```bash
+npm run build
+```
+
+Результат сборки находится в директории `dist`.
+
+Для локального просмотра production-сборки:
+
+```bash
+npm run preview
+```
+
+## Выполненные доработки
+
+- Оптимизирована загрузка данных каталога квартир.
+- Сокращены повторные запросы к API.
+- Поиск квартир переведён на работу с уже загруженными данными.
+- Доработан блок специальных предложений.
+- Удалены неиспользуемые стили.
+- Улучшена мобильная адаптивность.
+- Отключена прокрутка видеоролика по скроллу на мобильных устройствах.
