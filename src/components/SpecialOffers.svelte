@@ -182,10 +182,6 @@
     text-decoration: line-through;
   }
 
-  .offer-expiry {
-    margin: 10px 0 20px;
-  }
-
   .book-button {
     width: 100%;
     min-height: 48px;
@@ -202,11 +198,6 @@
   .book-button:hover {
     background: #333231;
     color: #fff;
-  }
-
-  .flat-area {
-    color: #6b6763;
-    font-size: 14px;
   }
 
   @media (max-width: 1024px) {
