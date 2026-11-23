@@ -184,4 +184,55 @@
     background: #333231;
     color: #fff;
   }
+
+
+  @media (max-width: 1024px) {
+    .special-offers {
+      padding: 120px 32px;
+    }
+
+    .section-title {
+      margin-bottom: 48px;
+      font-size: 48px;
+    }
+
+    .offers-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 48px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .special-offers {
+      padding: 96px 0;
+    }
+
+    .section-title {
+      margin: 0 16px 32px;
+      font-size: 34px;
+    }
+
+    .offers-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 0 16px 12px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .offers-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .offer-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+    }
+
+    .offer-info h3 {
+      font-size: 20px;
+    }
+  }
+
 </style>
