@@ -73,3 +73,115 @@
     </div>
   </div>
 </section>
+
+<style>
+  .special-offers {
+    padding: 160px 32px;
+    background: #eeecea;
+    color: #333231;
+  }
+
+  .offers-inner {
+    max-width: 1376px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    margin: 0 0 64px;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .offer-card {
+    min-width: 0;
+  }
+
+  .offer-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .offer-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .offer-label {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 8px 12px;
+    background: #eeecea;
+    font-size: 12px;
+  }
+
+  .offer-info {
+    padding-top: 20px;
+  }
+
+  .building,
+  .offer-expiry {
+    color: #6b6763;
+    font-size: 14px;
+  }
+
+  .building {
+    margin: 0 0 8px;
+  }
+
+  .offer-info h3 {
+    margin: 0 0 16px;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .offer-price {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .old-price {
+    color: #6b6763;
+    font-size: 14px;
+    text-decoration: line-through;
+  }
+
+  .offer-expiry {
+    margin: 10px 0 20px;
+  }
+
+  .book-button {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #333231;
+    background: transparent;
+    color: #333231;
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .book-button:hover {
+    background: #333231;
+    color: #fff;
+  }
+</style>
